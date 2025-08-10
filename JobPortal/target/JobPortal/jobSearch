@@ -1,0 +1,41 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<%@ page import="java.util.*, com.jobportal.model.Job" %>
+<%
+    List<Job> jobs = (List<Job>) request.getAttribute("jobs");
+%>
+<html>
+<head>
+    <title>Available Jobs</title>
+</head>
+<body>
+    <h2>Job Listings</h2>
+    <% if (request.getParameter("msg") != null) { %>
+        <p style="color:green;"><%= request.getParameter("msg") %></p>
+    <% } else if (request.getParameter("error") != null) { %>
+        <p style="color:red;"><%= request.getParameter("error") %></p>
+    <% } %>
+
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr>
+            <th>Job Title</th>
+            <th>Description</th>
+            <th>Location</th>
+            <th>Action</th>
+        </tr>
+        <% for (Job job : jobs) { %>
+        <tr>
+            <td><%= job.getTitle() %></td>
+            <td><%= job.getDescription() %></td>
+            <td><%= job.getLocation() %></td>
+            <td>
+                <form action="ApplyJobServlet" method="post">
+                    <input type="hidden" name="jobId" value="<%= job.getJobId() %>">
+                    Resume Link: <input type="text" name="resumeLink" required>
+                    <input type="submit" value="Apply">
+                </form>
+            </td>
+        </tr>
+        <% } %>
+    </table>
+</body>
+</html>
